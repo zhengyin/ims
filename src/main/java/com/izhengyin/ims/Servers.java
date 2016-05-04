@@ -1,28 +1,25 @@
 package com.izhengyin.ims;
 
-import java.nio.ByteBuffer;
 import java.security.cert.CertificateException;
-import java.util.List;
 
 import javax.net.ssl.SSLException;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public class Servers {
+	
+	
+	
+	
 	public void run(int port) throws InterruptedException, SSLException, CertificateException{
 		
 		// SSL 证书配置
@@ -33,9 +30,6 @@ public class Servers {
 		NioEventLoopGroup bossGroup = null;
 		NioEventLoopGroup workerGroup = null;
 		try {
-			
-			
-			
 			bossGroup = new NioEventLoopGroup(1);
 			workerGroup = new NioEventLoopGroup();
 			ServerBootstrap b = new ServerBootstrap();
@@ -63,6 +57,8 @@ public class Servers {
 		
 		@Override
 		protected void initChannel(SocketChannel sChannel) throws Exception {
+			System.out.println(sChannel.id());
+			
 			ChannelPipeline cPipeline = sChannel.pipeline();
 			cPipeline.addLast(new MultiProtocolServerHandler(sslCtx,false,false));
 		}

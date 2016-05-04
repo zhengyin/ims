@@ -13,7 +13,7 @@ public class SocketServerHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println("channelRead");
+		System.out.println(ctx.channel().id());
 		String body = (String)msg;
 		System.out.println("received client message:"+body+" : count "+ ++counter);
 		bytes = body.getBytes();
