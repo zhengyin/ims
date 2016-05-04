@@ -7,8 +7,8 @@ public class ClientChannelHandler extends ChannelInboundHandlerAdapter{
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		MessageEntity messageEntity = new MessageEntity();
-		byte[] body = "Hello Server".getBytes();
-		messageEntity.setBody(body);
+		messageEntity.setC("H");
+		messageEntity.setB("Hello server!");
 		ctx.writeAndFlush(messageEntity);
 		System.out.println("channelActive writeAndFlush!");
 	}

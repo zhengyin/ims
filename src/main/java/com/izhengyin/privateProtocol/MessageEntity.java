@@ -1,25 +1,36 @@
 package com.izhengyin.privateProtocol;
 
-import java.util.Arrays;
-
 public class MessageEntity {
-
-	private MessageHeaderEntity header;
-	private byte[] body;
-	public MessageHeaderEntity getHeader() {
-		return header;
+	private String C;
+	private String B;
+	/**
+	 * @return the c
+	 */
+	public String getC() {
+		return C;
 	}
-	public void setHeader(MessageHeaderEntity header) {
-		this.header = header;
+	/**
+	 * @param c the c to set
+	 */
+	public void setC(String c) {
+		C = c;
 	}
-	public byte[] getBody() {
-		return body;
+	/**
+	 * @return the b
+	 */
+	public String getB() {
+		return B;
 	}
-	public void setBody(byte[] body) {
-		this.body = body;
+	/**
+	 * @param b the b to set
+	 */
+	public void setB(String b) {
+		B = b;
 	}
+	
 	@Override
 	public String toString() {
-		return "MessageEntity [header=" + header + ", body=" + Arrays.toString(body) + "]";
+		return getC()+getB();
 	}
+	
 }

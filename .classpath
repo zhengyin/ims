@@ -22,5 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/jboss-marshalling-1.3.0.CR9.jar"/>
+	<classpathentry kind="lib" path="src/lib/jboss-marshalling-serial-1.3.0.CR9.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -57,8 +57,6 @@ public class Servers {
 		
 		@Override
 		protected void initChannel(SocketChannel sChannel) throws Exception {
-			System.out.println(sChannel.id());
-			
 			ChannelPipeline cPipeline = sChannel.pipeline();
 			cPipeline.addLast(new MultiProtocolServerHandler(sslCtx,false,false));
 		}

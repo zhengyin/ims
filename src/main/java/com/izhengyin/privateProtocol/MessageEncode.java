@@ -2,17 +2,17 @@ package com.izhengyin.privateProtocol;
 
 import java.util.List;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.MessageToByteEncoder;
 
-public class MessageEncode extends MessageToMessageEncoder<MessageEntity>{
-	public MessageEncode() {
-		System.out.println("MessageEncode");
-	}
+public class MessageEncode extends MessageToByteEncoder<MessageEntity>{
+
 	@Override
-	protected void encode(ChannelHandlerContext ctx, MessageEntity msg, List<Object> out) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, MessageEntity msg, ByteBuf out) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(msg.toString());
+		byte[] bytes = msg.toString().getBytes();
+		out.writeBytes(bytes);
 	}
 	
 }

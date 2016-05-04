@@ -3,6 +3,7 @@ package com.izhengyin.ims;
 import java.util.List;
 
 import com.izhengyin.http.HttpServerHandler;
+import com.izhengyin.privateProtocol.MessageDecode;
 import com.izhengyin.socket.SocketServerHandler;
 import com.izhengyin.websocket.WebSocketServerHandler;
 
@@ -130,8 +131,8 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	
 	private void switchToSocket(ChannelHandlerContext ctx){
 		ChannelPipeline p = ctx.pipeline();
-		p.addLast(new LineBasedFrameDecoder(1024));
-		p.addLast(new StringDecoder());
+		//p.addLast(new LineBasedFrameDecoder(1024));
+		p.addLast(new MessageDecode());
 	    p.addLast(new SocketServerHandler());
 		p.remove(this);
 		System.out.println("============ switchToSocket ============");
