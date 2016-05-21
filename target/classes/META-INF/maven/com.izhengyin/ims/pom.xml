@@ -21,8 +21,23 @@
 	    <groupId>io.netty</groupId>
 	    <artifactId>netty</artifactId>
 	    <version>4.1.0.CR7</version> 
-	    <systemPath>${basedir}/src/lib/netty-all-4.1.0.CR7.jar</systemPath>
-	    <scope>system</scope>
 	 </dependency>
+	<!-- http://logging.apache.org/log4j/2.x/maven-artifacts.html log4j2 start-->
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>2.0-beta9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>2.0-beta9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>2.0-beta9</version>
+    </dependency>
+    <!--  log4j2 end -->
   </dependencies>
 </project>
