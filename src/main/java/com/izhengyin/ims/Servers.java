@@ -11,6 +11,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
@@ -26,7 +27,6 @@ public class Servers {
         SelfSignedCertificate ssc = new SelfSignedCertificate();
         final SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey())
             .build();
-		
 		NioEventLoopGroup bossGroup = null;
 		NioEventLoopGroup workerGroup = null;
 		try {
