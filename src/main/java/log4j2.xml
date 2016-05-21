@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<Configuration status="WARN">
+	  <Appenders>
+	    <Console name="Console" target="SYSTEM_OUT">
+	      <PatternLayout pattern="global %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+	    </Console>
+	    <Console name="foo" target="SYSTEM_OUT">
+	      <PatternLayout pattern="foo %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+	    </Console>
+	  </Appenders>
+	  <Loggers>
+	  	<Logger name="com.izhengyin.maven.Slf4jDemo$Slf4jDemoFoo" level="trace" additivity="false">
+	      <AppenderRef ref="foo"/>
+	    </Logger>
+	    <Root level="trace">
+	      <AppenderRef ref="Console"/>
+	    </Root>
+	  </Loggers>
+	</Configuration>
