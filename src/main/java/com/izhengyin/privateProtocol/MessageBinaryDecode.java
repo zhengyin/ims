@@ -2,7 +2,6 @@ package com.izhengyin.privateProtocol;
 
 import java.util.List;
 
-import org.jboss.marshalling.MarshallerFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

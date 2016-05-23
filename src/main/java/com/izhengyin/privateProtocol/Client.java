@@ -49,7 +49,6 @@ public class Client {
 			
 			ChannelPipeline cPipeline = ch.pipeline();
 			cPipeline.addLast(new MessageEncode());
-			cPipeline.addLast(new MessageBinaryDecode());
 		//	cPipeline.addLast(new StringEncoder());
 			cPipeline.addLast(new ClientChannelHandler());
 			
