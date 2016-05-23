@@ -1,11 +1,8 @@
 package com.izhengyin.test;
 
 import java.nio.ByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class BufferDemo {
-	private static final Logger logger = LoggerFactory.getLogger(BufferDemo.class);
 	public static void main(String[] args) {
 		
 		//创建一个 24 byte 的空间大小

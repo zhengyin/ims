@@ -9,12 +9,10 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author zhengyin <zhengyin,name@gmail.com>
  * 线程池部分参考 {@link http://ifeve.com/java-threadpool/}
  */
@@ -27,7 +25,6 @@ public class NioServerPoolDemo {
 	private static final long KEEPALIVETIME = 300L;	//线程闲置的生命周期 5 单位秒
 	private static final int QUEUESIZE = 1000;		//任务队列大小 
 	public static void main(String[] args) throws IOException {
-		@SuppressWarnings("resource")
 		ServerSocketChannel serverSocket = ServerSocketChannel.open();
 		try{
 			serverSocket.socket().bind(new InetSocketAddress(3002));
@@ -52,7 +49,6 @@ public class NioServerPoolDemo {
 	}
 	
 	
-	@SuppressWarnings("unused")
 	private static class ServerSocketChannelHandler extends Thread{
 		SocketChannel socketChannel;
 		SocketAddress remoteSocketAddress ;

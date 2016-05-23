@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
 public class AioClientDemo {
 
 	private static final Logger logger = LoggerFactory.getLogger(AioClientDemo.class);
-	
+	private static AsynchronousSocketChannel socketChannel;
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-		AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open();
+		socketChannel = AsynchronousSocketChannel.open();
 		InetSocketAddress remote = new InetSocketAddress("127.0.0.1", 3002);
 		Future<Void> connectResult =  socketChannel.connect(remote);
 		if(connectResult.get() != null){
@@ -35,15 +35,14 @@ public class AioClientDemo {
 		
 		Future<Integer> readResult = socketChannel.read(buffer);
 		int readSize = readResult.get();	//阻塞
-		while (true) {
+		while (socketChannel.isOpen()) {
 			if(readSize > 0){	//读到数据
 				String msg = read(readSize, buffer);
 				if(msg.equals("Hi,Client")){		//服务端响应  Hi,Server 的应答消息
-					write(socketChannel, "I am here");
+					write("I am here");
 				}else if(msg.equals("ok")){
 					logger.info("应答完成,主动关闭连接");
 					socketChannel.close();
-					break;
 				}else{
 					logger.debug("未知的消息："+msg);
 				}
@@ -53,14 +52,17 @@ public class AioClientDemo {
 			}else{	//空数据
 				logger.info("空数据");
 			}
-			buffer.clear();
+			//接着读
+			if(socketChannel.isOpen()){
+				logger.debug("接着读");
+				buffer.clear();
+				readResult = socketChannel.read(buffer);//异步
+				
+				// ... 可以干点别的
+				
+				readSize = readResult.get();		//阻塞
+			}
 			
-			readResult = socketChannel.read(buffer);//异步
-			
-			// ... 可以干点别的
-			
-			readSize = readResult.get();		//阻塞
-			readResult.cancel(true);
 		}
 		logger.debug("---- 程序终止  ----");
 	}
@@ -74,7 +76,7 @@ public class AioClientDemo {
 		return msg;
 	}
 	
-	private static void write(AsynchronousSocketChannel socketChannel,String msg){
+	private static void write(String msg){
 		byte[] bytes = msg.getBytes();
 		ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
 		buffer.put(bytes);

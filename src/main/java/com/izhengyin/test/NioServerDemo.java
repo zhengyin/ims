@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 public class NioServerDemo {	
 	private static final Logger logger = LoggerFactory.getLogger(NioServerDemo.class);
 	public static void main(String[] args) throws IOException {
-		@SuppressWarnings("resource")
 		ServerSocketChannel serverSocket = ServerSocketChannel.open();
 		
 		try{
@@ -27,7 +26,6 @@ public class NioServerDemo {
 	}
 	
 	
-	@SuppressWarnings("unused")
 	private static class ServerSocketChannelHandler extends Thread{
 		SocketChannel socketChannel;
 		SocketAddress remoteSocketAddress ;
