@@ -1,18 +1,17 @@
-package com.izhengyin.ims;
+package com.izhengyin.app;
 
 import java.util.List;
 
-import com.izhengyin.http.HttpServerHandler;
-import com.izhengyin.privateProtocol.MessageDecode;
-import com.izhengyin.privateProtocol.MessageEncode;
-import com.izhengyin.socket.SocketServerHandler;
-import com.izhengyin.websocket.WebSocketServerHandler;
+import com.izhengyin.protocol.ims.ImsProtocolAuthHandler;
+import com.izhengyin.protocol.ims.ImsProtocolDecode;
+import com.izhengyin.protocol.ims.ImsProtocolEncode;
+import com.izhengyin.protocol.websocket.WebSocketServerHandler;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.http.HttpContentCompressor;
@@ -21,7 +20,6 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslHandler;
 
@@ -30,6 +28,7 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	private SslContext sslCtx;
 	private Boolean useSsl;
 	private Boolean useGzip;
+	
 	public MultiProtocolServerHandler(SslContext sslCtx) {
 		this(sslCtx, true, true);
 	}
@@ -50,23 +49,34 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	 * 使用输入流中前两个字节进行协议区分
 	 */
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out){
 		
 		
 		final int magic1 = in.getUnsignedByte(0);
 		final int magic2 = in.getUnsignedByte(1);
-		
-		
-		
 		
 		if(isSsl(in)){
 			enabledSsl(ctx);
 		}else if(isGizp(magic1, magic2)){
 			enabledGzip(ctx);
 		}else if(isHttp(magic1, magic2)){
-			switchToHttp(ctx);
-		}else{
+			//继续验证是否为websocket协议连接
+			ByteBuf buf = Unpooled.buffer(WEBSOCKET_PATH.length());
+			in.getBytes(4, buf);
+			byte[] bytes = new byte[buf.readableBytes()];
+			buf.readBytes(bytes);
+			String webSocketPath = new String(bytes);
+			System.out.println(webSocketPath);
+			if(webSocketPath.equals(WEBSOCKET_PATH)){
+				switchToWebSocket(ctx);
+			}else{
+				switchToHttp(ctx);
+			}
+		}else if(isImSocket(magic1, magic2)){
 			switchToSocket(ctx);
+		}else{
+			System.out.println("cannot be identified proticol ,  close connected! magic1:"+magic1+" magic2:"+magic2);
+			ctx.close();
 		}
 	}
 	
@@ -98,6 +108,10 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	            magic1 == 'C' && magic2 == 'O';   // CONNECT
 	}
 	
+	private boolean isImSocket(int magic1,int magic2){
+		return magic1 == 73 && magic2 == 77;
+	}
+	
 	
 	private void enabledSsl(ChannelHandlerContext ctx){
 		ChannelPipeline p = ctx.pipeline();
@@ -122,22 +136,29 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	    p.addLast("encoder", new HttpResponseEncoder());
 	    p.addLast("deflater", new HttpContentCompressor());
 	    p.addLast(new HttpObjectAggregator(65536));
-        p.addLast(new WebSocketServerCompressionHandler());
-        p.addLast(new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true));
-	    p.addLast("handler1",new HttpServerHandler());
 	    p.addLast("handler2", new WebSocketServerHandler());
 		p.remove(this);
 		System.out.println("============ switchToHttp ============");
 	}
 	
+	private void switchToWebSocket(ChannelHandlerContext ctx){
+		ChannelPipeline p = ctx.pipeline();
+		p.addLast("decoder", new HttpRequestDecoder());
+	    p.addLast("encoder", new HttpResponseEncoder());
+	    p.addLast("deflater", new HttpContentCompressor());
+	    p.addLast(new HttpObjectAggregator(65536));
+        p.addLast(new WebSocketServerCompressionHandler());
+        p.addLast(new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true));
+	    p.addLast( new WebSocketServerHandler());
+		p.remove(this);
+		System.out.println("============ switchToWebSocket ============");
+	}
+	
 	private void switchToSocket(ChannelHandlerContext ctx){
 		ChannelPipeline p = ctx.pipeline();
-		//p.addLast(new LineBasedFrameDecoder(1024));
-		//p.addLast(new MessageBinaryDecode());
-		p.addLast(new MessageDecode(1024,0,4)); 
-		p.addLast(new MessageEncode());
-	    p.addLast(new SocketServerHandler());
-	    
+		p.addLast("ImsProtocolDecode",new ImsProtocolDecode(65535, 3, 4));
+		p.addLast("ImsProtocolEncode",new ImsProtocolEncode());
+		p.addLast("ImsProtocolAuthHandler",new ImsProtocolAuthHandler());
 		p.remove(this);
 		System.out.println("============ switchToSocket ============");
 	}

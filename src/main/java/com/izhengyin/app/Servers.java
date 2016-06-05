@@ -1,4 +1,4 @@
-package com.izhengyin.ims;
+package com.izhengyin.app;
 
 import java.security.cert.CertificateException;
 
@@ -11,15 +11,11 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public class Servers {
-	
-	
-	
 	
 	public void run(int port) throws InterruptedException, SSLException, CertificateException{
 		

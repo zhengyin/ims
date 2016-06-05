@@ -1,4 +1,4 @@
-package com.izhengyin.ims;
+package com.izhengyin.app;
 
 /**
  * Hello world!

@@ -1,12 +1,8 @@
-package com.izhengyin.http;
+package com.izhengyin.protocol.http;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
+
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
-
-import java.util.Hashtable;
-import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
