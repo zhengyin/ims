@@ -28,6 +28,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<WebSocke
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
+    	
+    	
+    	
+    	
         if (frame instanceof TextWebSocketFrame) {
         	
             String request = ((TextWebSocketFrame) frame).text();

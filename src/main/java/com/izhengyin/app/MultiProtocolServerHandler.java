@@ -2,9 +2,14 @@ package com.izhengyin.app;
 
 import java.util.List;
 
+import com.izhengyin.protocol.http.HttpServerAuthHandler;
+import com.izhengyin.protocol.http.HttpServerHandler;
 import com.izhengyin.protocol.ims.ImsProtocolAuthHandler;
 import com.izhengyin.protocol.ims.ImsProtocolDecode;
 import com.izhengyin.protocol.ims.ImsProtocolEncode;
+import com.izhengyin.protocol.websocket.WebSocketAuthHandler;
+import com.izhengyin.protocol.websocket.WebSocketMessageDecode;
+import com.izhengyin.protocol.websocket.WebSocketProtocolEncode;
 import com.izhengyin.protocol.websocket.WebSocketServerHandler;
 
 import io.netty.buffer.ByteBuf;
@@ -18,6 +23,7 @@ import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.ssl.SslContext;
@@ -136,20 +142,23 @@ public class MultiProtocolServerHandler extends ByteToMessageDecoder{
 	    p.addLast("encoder", new HttpResponseEncoder());
 	    p.addLast("deflater", new HttpContentCompressor());
 	    p.addLast(new HttpObjectAggregator(65536));
-	    p.addLast("handler2", new WebSocketServerHandler());
+	    p.addLast("HttpServerAuthHandler", new HttpServerAuthHandler());
+	  //  p.addLast("HttpSpecificServerHandler", new HttpSpecificServerHandler());
+	  //  p.addLast("HttpMessageHandler", new HttpMessageHandler());
+	    p.addLast("HttpServerHandler", new HttpServerHandler());
 		p.remove(this);
 		System.out.println("============ switchToHttp ============");
 	}
 	
 	private void switchToWebSocket(ChannelHandlerContext ctx){
 		ChannelPipeline p = ctx.pipeline();
-		p.addLast("decoder", new HttpRequestDecoder());
-	    p.addLast("encoder", new HttpResponseEncoder());
-	    p.addLast("deflater", new HttpContentCompressor());
-	    p.addLast(new HttpObjectAggregator(65536));
-        p.addLast(new WebSocketServerCompressionHandler());
-        p.addLast(new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true));
-	    p.addLast( new WebSocketServerHandler());
+        p.addLast("HttpServerCodec",new HttpServerCodec());
+        p.addLast("HttpObjectAggregator",new HttpObjectAggregator(65536));
+        p.addLast("WebSocketServerCompressionHandler",new WebSocketServerCompressionHandler());
+        p.addLast("WebSocketServerProtocolHandler",new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true));
+        p.addLast("WebSocketMessageDecode",new WebSocketMessageDecode());
+        p.addLast("WebSocketProtocolEncode",new WebSocketProtocolEncode());
+        p.addLast("WebSocketAuthHandler",new WebSocketAuthHandler());
 		p.remove(this);
 		System.out.println("============ switchToWebSocket ============");
 	}
