@@ -7,7 +7,9 @@ import java.nio.channels.SocketChannel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ * @author zhengyin < http://izhengyin.com >
+ */
 public class NioClientDemo {
 	private static final Logger logger = LoggerFactory.getLogger(NioClientDemo.class);
 	private static SocketChannel socketChannel;

@@ -1,7 +1,9 @@
 package com.izhengyin.test;
 
 import java.nio.ByteBuffer;
-
+/**
+ * @author zhengyin < http://izhengyin.com >
+ */
 public class BufferDemo {
 	public static void main(String[] args) {
 		

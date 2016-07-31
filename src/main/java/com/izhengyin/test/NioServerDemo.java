@@ -8,7 +8,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ * @author zhengyin < http://izhengyin.com >
+ */
 public class NioServerDemo {	
 	private static final Logger logger = LoggerFactory.getLogger(NioServerDemo.class);
 	public static void main(String[] args) throws IOException {

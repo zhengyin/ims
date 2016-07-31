@@ -11,7 +11,9 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ * @author zhengyin < http://izhengyin.com >
+ */
 public class AioServerDemo {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AioServerDemo.class);

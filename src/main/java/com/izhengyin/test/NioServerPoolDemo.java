@@ -13,8 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author zhengyin <zhengyin,name@gmail.com>
- * 线程池部分参考 {@link http://ifeve.com/java-threadpool/}
+ * @author zhengyin < http://izhengyin.com >
  */
 public class NioServerPoolDemo {
 	

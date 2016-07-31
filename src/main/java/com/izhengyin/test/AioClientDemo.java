@@ -11,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
+/**
+ * @author zhengyin < http://izhengyin.com >
+ */
 public class AioClientDemo {
 
 	private static final Logger logger = LoggerFactory.getLogger(AioClientDemo.class);

@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 
- * @author Administrator
- * 参考 {@link http://ifeve.com/selectors/}
- * 
+ * @author zhengyin < http://izhengyin.com >
  */
 public class NioServerNoBlockingDemo {
 	
